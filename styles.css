@@ -1,0 +1,116 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --timer-ff: "Roboto", sans-serif;
+  font-size: 62.5%;
+}
+
+.hide {
+  display: none;
+}
+
+main,
+.timer,
+.time-display,
+.controls {
+  display: flex;
+  align-items: center;
+}
+
+main {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  gap: 5rem;
+  width: clamp(30rem, 100vw, 150rem);
+  margin: auto;
+}
+
+.timer {
+  flex-direction: column;
+  gap: 1.7rem;
+}
+
+.time-display {
+  font-family: var(--timer-ff);
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(12.6rem, 20vw, 20rem);
+  line-height: 14.8rem;
+  text-align: center;
+  color: #323238;
+}
+
+.controls {
+  gap: clamp(4rem, 5vw, 10rem);
+}
+
+.sound-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.4rem;
+}
+
+.sound-selector button {
+  width: 44%;
+}
+
+button {
+  border: none;
+  background: none;
+}
+
+@media (min-width: 600px) {
+  .timer {
+    gap: 4.8rem;
+  }
+
+  .timer svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  .sound-selector svg {
+    width: 167px;
+    height: 184px;
+  }
+}
+
+@media (min-width: 1000px) {
+  main {
+    flex-direction: row;
+    gap: 19.2rem;
+  }
+
+  .timer {
+    gap: 3.2rem;
+  }
+
+  .controls {
+    gap: 4rem;
+  }
+
+  .time-display {
+    font-size: clamp(12.6rem, 20vw, 20rem);
+    font-size: 12.6rem;
+  }
+
+  .sound-selector {
+    gap: 3.2rem;
+  }
+
+  .timer svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .sound-selector svg {
+    width: 138px;
+    height: 152px;
+  }
+}
