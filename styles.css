@@ -60,9 +60,26 @@ main {
   width: 44%;
 }
 
+.down path:nth-child(1) {
+  fill: #02799d;
+}
+
+.down path:nth-child(2) {
+  fill: #fff;
+}
+
+.up path:nth-child(1) {
+  fill: #e1e1e6;
+}
+
+.up path:nth-child(2) {
+  fill: #323238;
+}
+
 button {
   border: none;
   background: none;
+  cursor: pointer;
 }
 
 @media (min-width: 600px) {
