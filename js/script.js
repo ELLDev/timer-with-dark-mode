@@ -5,25 +5,105 @@ const pauseButton = document.querySelector(".pause");
 const stopButton = document.querySelector(".stop");
 const incrementButton = document.querySelector(".increment");
 const decrementButton = document.querySelector(".decrement");
-let soundButtons = document.querySelectorAll(".sound-selector button");
+const forestButton = document.querySelector(".forest");
+const rainButton = document.querySelector(".rain");
+const coffeeshopButton = document.querySelector(".coffeeshop");
+const fireplaceButton = document.querySelector(".fireplace");
+const soundButtons = document.querySelectorAll(".sound-selector button");
+const forestSound = new Audio("sounds/Floresta.wav");
+const rainSound = new Audio("sounds/Chuva.wav");
+const coffeeshopSound = new Audio("sounds/Cafeteria.wav");
+const fireplaceSound = new Audio("sounds/Lareira.wav");
+const clickSound = new Audio("sounds/Click.wav");
+const playSound = new Audio("sounds/Play.wav");
+// const alarmSound = new Audio("sounds/Alarm.ogg")
 let isCountDownActive = false;
 let elapsedMilliseconds = 1000;
-let activeSound;
+let activeButton = null;
+let activeSound = null;
+
+forestButton.addEventListener("click", () => {
+  if (activeSound) {
+    activeSound.pause();
+    activeSound.currentTime = 0;
+    if (activeSound === forestSound) {
+      activeSound = null;
+    } else {
+      activeSound = forestSound;
+      activeSound.play();
+      activeSound.loop = true;
+    }
+  } else {
+    activeSound = forestSound;
+    activeSound.play();
+    activeSound.loop = true;
+  }
+});
+
+rainButton.addEventListener("click", () => {
+  if (activeSound) {
+    activeSound.pause();
+    activeSound.currentTime = 0;
+    if (activeSound === rainSound) {
+      activeSound = null;
+    } else {
+      activeSound = rainSound;
+      activeSound.play();
+      activeSound.loop = true;
+    }
+  } else {
+    activeSound = rainSound;
+    activeSound.play();
+    activeSound.loop = true;
+  }
+});
+
+coffeeshopButton.addEventListener("click", () => {
+  if (activeSound) {
+    activeSound.pause();
+    activeSound.currentTime = 0;
+    if (activeSound === coffeeshopSound) {
+      activeSound = null;
+    } else {
+      activeSound = coffeeshopSound;
+      activeSound.play();
+      activeSound.loop = true;
+    }
+  } else {
+    activeSound = coffeeshopSound;
+    activeSound.play();
+    activeSound.loop = true;
+  }
+});
+
+fireplaceButton.addEventListener("click", () => {
+  if (activeSound) {
+    activeSound.pause();
+    activeSound.currentTime = 0;
+    if (activeSound === fireplaceSound) {
+      activeSound = null;
+    } else {
+      activeSound = fireplaceSound;
+      activeSound.play();
+      activeSound.loop = true;
+    }
+  } else {
+    activeSound = fireplaceSound;
+    activeSound.play();
+    activeSound.loop = true;
+  }
+});
 
 selectSound = (button) => {
-  if (button.classList.contains("down")) {
-    activeSound.classList.remove("down");
-    activeSound = null;
-    button.classList.remove("down");
-    button.classList.add("up");
+  if (button.classList.contains("button-pressed")) {
+    activeButton = null;
+    button.classList.toggle("button-pressed");
   } else {
-    if (activeSound) {
-      activeSound.classList.remove("down");
-      activeSound.classList.add("up");
+    if (activeButton) {
+      activeButton.classList.toggle("button-pressed");
     }
-    activeSound = button;
-    button.classList.add("down");
-    button.classList.remove("up");
+    activeButton = button;
+    button.classList.toggle("button-pressed");
   }
 };
 
@@ -34,6 +114,9 @@ soundButtons.forEach((button) => {
 });
 
 pauseTimer = () => {
+  playSound.pause();
+  playSound.currentTime = 0;
+  playSound.play();
   isCountDownActive = false;
   playButton.classList.remove("hide");
   pauseButton.classList.add("hide");
@@ -41,6 +124,9 @@ pauseTimer = () => {
 
 playButton.addEventListener("click", () => {
   if (Number(minutes.textContent) > 0 || Number(seconds.textContent) > 0) {
+    playSound.pause();
+    playSound.currentTime = 0;
+    playSound.play();
     isCountDownActive = true;
     playButton.classList.add("hide");
     pauseButton.classList.remove("hide");
@@ -52,18 +138,22 @@ pauseButton.addEventListener("click", () => {
 });
 
 stopButton.addEventListener("click", () => {
-  pauseTimer();
-  seconds.textContent = "00";
-  minutes.textContent = "00";
+  if (Number(minutes.textContent) > 0 || Number(seconds.textContent) > 0) {
+    pauseTimer();
+    seconds.textContent = "00";
+    minutes.textContent = "00";
+  }
 });
 
 incrementButton.addEventListener("click", () => {
   minutes.textContent = `${Number(minutes.textContent) + 5}`.padStart(2, 0);
+  clickSound.play();
 });
 
 decrementButton.addEventListener("click", () => {
-  if (Number(minutes.textContent) > 0) {
+  if (Number(minutes.textContent) >= 5) {
     minutes.textContent = `${Number(minutes.textContent) - 5}`.padStart(2, 0);
+    clickSound.play();
   }
 });
 
@@ -78,6 +168,15 @@ countdown = () => {
             seconds.textContent = "00";
             if (Number(minutes.textContent) === 0) {
               pauseTimer();
+              // alarmSound.play();
+              // alarmSound.loop = true;
+              if (activeSound) {
+                activeSound.pause();
+                activeSound.currentTime = 0;
+                activeSound = null;
+                activeButton.classList.toggle("button-pressed");
+                activeButton = null;
+              }
               return;
             }
             break;
