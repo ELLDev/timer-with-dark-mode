@@ -57,15 +57,74 @@ main {
 }
 
 .sound-selector button {
-  width: 44%;
+  display: flex;
+  min-width: 13.8rem;
+  /* max-width: 13.8rem; */
+  min-height: 15.2rem;
+  /* max-height: 15.2rem; */
+  border-radius: 2rem;
+  flex-direction: column;
+  background-color: #e1e1e6;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
-.button-pressed path:nth-child(1) {
-  fill: #02799d;
+.sound-selector button:hover {
+  filter: brightness(0.9);
 }
 
-.button-pressed path:nth-child(2) {
+.sound-selector button svg {
+  width: 33.5%;
+  margin: 0;
+  margin: 2.4rem 0 3.8rem;
+  height: 5.6rem; /* change with media queries */
+}
+
+.slider {
+  -webkit-appearance: none;
+  border-radius: 0.5rem;
+  width: 65%;
+  height: 0.4rem;
+  background: #323238;
+  outline: none;
+  margin: 0;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #323238;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  border: none;
+  border-radius: 50%;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: #323238;
+  cursor: pointer;
+}
+
+.sound-selector .button-pressed {
+  background-color: #02799d;
+}
+
+.button-pressed path {
   fill: #fff;
+}
+
+.button-pressed .slider,
+.button-pressed .slider::-webkit-slider-thumb {
+  background: #fff;
+}
+
+.button-pressed .slider::-moz-range-thumb {
+  background: #fff;
 }
 
 button {
@@ -74,12 +133,16 @@ button {
   cursor: pointer;
 }
 
-.sound-selector button:hover {
-  filter: brightness(0.9);
+.theme-selector {
+  position: absolute;
+  top: 6rem;
+  right: 6rem;
 }
 
-.controls button:hover {
-  filter: drop-shadow(0px 0px 1px #323238);}
+.controls button:hover,
+.theme-selector button:hover {
+  filter: drop-shadow(0px 0px 1px #323238);
+}
 
 @media (min-width: 600px) {
   .timer {

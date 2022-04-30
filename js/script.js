@@ -10,6 +10,7 @@ const rainButton = document.querySelector(".rain");
 const coffeeshopButton = document.querySelector(".coffeeshop");
 const fireplaceButton = document.querySelector(".fireplace");
 const soundButtons = document.querySelectorAll(".sound-selector button");
+const volumeSliders = document.querySelectorAll(".sound-selector button input");
 const forestSound = new Audio("sounds/Floresta.wav");
 const rainSound = new Audio("sounds/Chuva.wav");
 const coffeeshopSound = new Audio("sounds/Cafeteria.wav");
@@ -19,97 +20,43 @@ const playSound = new Audio("sounds/Play.wav");
 // const alarmSound = new Audio("sounds/Alarm.ogg")
 let isCountDownActive = false;
 let elapsedMilliseconds = 1000;
-let activeButton = null;
-let activeSound = null;
+// let activeButton = null;
+// let activeSound = null;
 
-forestButton.addEventListener("click", () => {
-  if (activeSound) {
-    activeSound.pause();
-    activeSound.currentTime = 0;
-    if (activeSound === forestSound) {
-      activeSound = null;
-    } else {
-      activeSound = forestSound;
-      activeSound.play();
-      activeSound.loop = true;
-    }
-  } else {
-    activeSound = forestSound;
-    activeSound.play();
-    activeSound.loop = true;
-  }
-});
-
-rainButton.addEventListener("click", () => {
-  if (activeSound) {
-    activeSound.pause();
-    activeSound.currentTime = 0;
-    if (activeSound === rainSound) {
-      activeSound = null;
-    } else {
-      activeSound = rainSound;
-      activeSound.play();
-      activeSound.loop = true;
-    }
-  } else {
-    activeSound = rainSound;
-    activeSound.play();
-    activeSound.loop = true;
-  }
-});
-
-coffeeshopButton.addEventListener("click", () => {
-  if (activeSound) {
-    activeSound.pause();
-    activeSound.currentTime = 0;
-    if (activeSound === coffeeshopSound) {
-      activeSound = null;
-    } else {
-      activeSound = coffeeshopSound;
-      activeSound.play();
-      activeSound.loop = true;
-    }
-  } else {
-    activeSound = coffeeshopSound;
-    activeSound.play();
-    activeSound.loop = true;
-  }
-});
-
-fireplaceButton.addEventListener("click", () => {
-  if (activeSound) {
-    activeSound.pause();
-    activeSound.currentTime = 0;
-    if (activeSound === fireplaceSound) {
-      activeSound = null;
-    } else {
-      activeSound = fireplaceSound;
-      activeSound.play();
-      activeSound.loop = true;
-    }
-  } else {
-    activeSound = fireplaceSound;
-    activeSound.play();
-    activeSound.loop = true;
-  }
-});
-
-selectSound = (button) => {
-  if (button.classList.contains("button-pressed")) {
-    activeButton = null;
-    button.classList.toggle("button-pressed");
-  } else {
-    if (activeButton) {
-      activeButton.classList.toggle("button-pressed");
-    }
-    activeButton = button;
-    button.classList.toggle("button-pressed");
-  }
+backgroundSounds = {
+  forest: forestSound,
+  rain: rainSound,
+  coffeeshop: coffeeshopSound,
+  fireplace: fireplaceSound,
 };
 
 soundButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    selectSound(button);
+  button.addEventListener("click", (e) => {
+    if (e.target.tagName !== "INPUT") {
+      if (button.children[1].value > 1) {
+        let sound = backgroundSounds[button.classList[0]];
+        button.classList.toggle("button-pressed");
+        if (sound.paused === true) {
+          sound.play();
+        } else {
+          sound.pause();
+        }
+      }
+    }
+  });
+});
+
+volumeSliders.forEach((slider) => {
+  slider.addEventListener("change", () => {
+    let sound = backgroundSounds[slider.parentElement.classList[0]];
+    sound.volume = slider.value / 100;
+    if (slider.value > 1) {
+      sound.play();
+      slider.parentElement.classList.add("button-pressed");
+    } else {
+      sound.pause();
+      slider.parentElement.classList.remove("button-pressed");
+    }
   });
 });
 
@@ -170,13 +117,13 @@ countdown = () => {
               pauseTimer();
               // alarmSound.play();
               // alarmSound.loop = true;
-              if (activeSound) {
-                activeSound.pause();
-                activeSound.currentTime = 0;
-                activeSound = null;
-                activeButton.classList.toggle("button-pressed");
-                activeButton = null;
-              }
+              // if (activeSound) {
+              //   activeSound.pause();  
+              //   activeSound.currentTime = 0;
+              //   activeSound = null;
+              //   activeButton.classList.toggle("button-pressed");
+              //   activeButton = null;
+              // }
               return;
             }
             break;
