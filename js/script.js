@@ -5,11 +5,14 @@ const pauseButton = document.querySelector(".pause");
 const stopButton = document.querySelector(".stop");
 const incrementButton = document.querySelector(".increment");
 const decrementButton = document.querySelector(".decrement");
-const forestButton = document.querySelector(".forest");
-const rainButton = document.querySelector(".rain");
-const coffeeshopButton = document.querySelector(".coffeeshop");
-const fireplaceButton = document.querySelector(".fireplace");
+const controlButtons = document.querySelectorAll(".controls path");
+const lightThemeButton = document.querySelector(".light-theme");
+const darkThemeButton = document.querySelector(".dark-theme");
+const themeSelectorButtons = document.querySelectorAll(".theme-selector button");
+const body = document.querySelector("body");
+const timeDisplay = document.querySelectorAll(".time-display span");
 const soundButtons = document.querySelectorAll(".sound-selector button");
+const soundButtonIcons = document.querySelectorAll(".sound-selector path")
 const volumeSliders = document.querySelectorAll(".sound-selector button input");
 const forestSound = new Audio("sounds/Floresta.wav");
 const rainSound = new Audio("sounds/Chuva.wav");
@@ -17,11 +20,45 @@ const coffeeshopSound = new Audio("sounds/Cafeteria.wav");
 const fireplaceSound = new Audio("sounds/Lareira.wav");
 const clickSound = new Audio("sounds/Click.wav");
 const playSound = new Audio("sounds/Play.wav");
-// const alarmSound = new Audio("sounds/Alarm.ogg")
+const alarmSound = new Audio("sounds/Alarm.mp3")
+const alarmButton = document.querySelector(".alarm button");
+const alarmIcon = document.querySelector(".alarm-icon path");
+const alarmSoundbars = document.querySelector(".soundbars");
+const alarmSoundbarsIcons = document.querySelectorAll(".soundbars path");
 let isCountDownActive = false;
 let elapsedMilliseconds = 1000;
-// let activeButton = null;
-// let activeSound = null;
+let isAlarmSet = true;
+
+// TODO: - add soundbar icon toggle sound
+//       - add shaking animation to alarm icon when alarmSound is playing
+//       - color transition animation to stop button when alarmSound is playing
+
+alarmButton.addEventListener(("click"), () => {
+  isAlarmSet = !isAlarmSet;
+  alarmSoundbars.classList.toggle("hide");
+  if (!alarmSound.paused) {
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+  }
+});
+
+toggleDarkModeTheme = () => {
+  lightThemeButton.classList.toggle("hide");
+  darkThemeButton.classList.toggle("hide");
+  body.classList.toggle("dark-mode-background");
+  timeDisplay.forEach(display => display.classList.toggle("dark-mode-time-display"));
+  controlButtons.forEach(button => button.classList.toggle("dark-mode-control-buttons"));
+  soundButtons.forEach(button => button.classList.toggle("dark-mode-sound-selector-buttons"));
+  soundButtonIcons.forEach(icon => icon.classList.toggle("dark-mode-sound-selector-icons"));
+  alarmIcon.classList.toggle("dark-mode-alarm");
+  alarmSoundbarsIcons.forEach(icon => icon.classList.toggle("dark-mode-soundbars"));
+};
+
+themeSelectorButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    toggleDarkModeTheme();
+  });
+});
 
 backgroundSounds = {
   forest: forestSound,
@@ -29,19 +66,24 @@ backgroundSounds = {
   coffeeshop: coffeeshopSound,
   fireplace: fireplaceSound,
 };
+Object.values(backgroundSounds).forEach(sound => sound.loop = true);
 
 soundButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     if (e.target.tagName !== "INPUT") {
-      if (button.children[1].value > 1) {
-        let sound = backgroundSounds[button.classList[0]];
-        button.classList.toggle("button-pressed");
+      button.classList.toggle("button-pressed");
+      let sound = backgroundSounds[button.classList[0]];
+      if (Number(button.children[1].value) === 1) {
+        button.children[1].value = 100;
+        sound.volume = button.children[1].value / 100;
+        sound.play();
+      } else {
         if (sound.paused === true) {
           sound.play();
         } else {
           sound.pause();
         }
-      }
+      }    
     }
   });
 });
@@ -85,6 +127,10 @@ pauseButton.addEventListener("click", () => {
 });
 
 stopButton.addEventListener("click", () => {
+  if (!alarmSound.paused) {
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+  }
   if (Number(minutes.textContent) > 0 || Number(seconds.textContent) > 0) {
     pauseTimer();
     seconds.textContent = "00";
@@ -115,16 +161,20 @@ countdown = () => {
             seconds.textContent = "00";
             if (Number(minutes.textContent) === 0) {
               pauseTimer();
-              // alarmSound.play();
-              // alarmSound.loop = true;
-              // if (activeSound) {
-              //   activeSound.pause();  
-              //   activeSound.currentTime = 0;
-              //   activeSound = null;
-              //   activeButton.classList.toggle("button-pressed");
-              //   activeButton = null;
-              // }
-              return;
+              Object.values(backgroundSounds).forEach(sound => {
+                sound.pause();
+                sound.currentTime = 0;
+              });
+              soundButtons.forEach(button => {
+                if (button.classList.contains("button-pressed")) {
+                  button.classList.toggle("button-pressed");
+                }
+              });
+              if (isAlarmSet) {
+                isAlarmSet = false;
+                alarmSound.play();
+                alarmSound.loop = true;
+              }
             }
             break;
           case 0:

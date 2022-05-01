@@ -135,13 +135,65 @@ button {
 
 .theme-selector {
   position: absolute;
-  top: 6rem;
-  right: 6rem;
+  top: 6.4rem;
+  right: 6.4rem;
+}
+
+.alarm {
+  position: absolute;
+  bottom: 6.4rem;
+  right: 6.4rem;
+}
+
+.alarm .soundbars {
+  position: absolute;
+  transform: translate(-24px, -58px) rotate(270deg);
 }
 
 .controls button:hover,
-.theme-selector button:hover {
+.light-theme:hover {
   filter: drop-shadow(0px 0px 1px #323238);
+}
+
+.dark-theme:hover {
+  filter: drop-shadow(0px 0px 1px #fff);
+}
+
+.dark-mode-background {
+  background-color: #121214;
+}
+
+.dark-mode-time-display {
+  color: #fff;
+}
+
+.dark-mode-control-buttons,
+.dark-mode-sound-selector-icons {
+  fill: #c4c4cc;
+}
+
+.sound-selector .dark-mode-sound-selector-buttons {
+  background-color: #29292e;
+}
+
+.dark-mode-sound-selector-buttons.button-pressed {
+  background-color: #0a3442;
+}
+
+.dark-mode-sound-selector-buttons .slider,
+.dark-mode-sound-selector-buttons .slider::-webkit-slider-thumb {
+  background: #fff;
+}
+
+.dark-mode-sound-selector-buttons
+  .dark-mode-control-buttons
+  .slider::-moz-range-thumb {
+  background: #fff;
+}
+
+.dark-mode-alarm,
+.dark-mode-soundbars {
+  fill: #fff;
 }
 
 @media (min-width: 600px) {
