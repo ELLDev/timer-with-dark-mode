@@ -5,7 +5,7 @@ const pauseButton = document.querySelector(".pause");
 const stopButton = document.querySelector(".stop");
 const incrementButton = document.querySelector(".increment");
 const decrementButton = document.querySelector(".decrement");
-const controlButtons = document.querySelectorAll(".controls path");
+const controlButtons = document.querySelectorAll(".controls button");
 const lightThemeButton = document.querySelector(".light-theme");
 const darkThemeButton = document.querySelector(".dark-theme");
 const themeSelectorButtons = document.querySelectorAll(".theme-selector button");
@@ -21,24 +21,25 @@ const fireplaceSound = new Audio("sounds/Lareira.wav");
 const clickSound = new Audio("sounds/Click.wav");
 const playSound = new Audio("sounds/Play.wav");
 const alarmSound = new Audio("sounds/Alarm.mp3")
+const setAlarmSound = new Audio("sounds/Set-Alarm.mp3")
 const alarmButton = document.querySelector(".alarm button");
-const alarmIcon = document.querySelector(".alarm-icon path");
+const alarmIcon = document.querySelector(".alarm-icon");
 const alarmSoundbars = document.querySelector(".soundbars");
 const alarmSoundbarsIcons = document.querySelectorAll(".soundbars path");
 let isCountDownActive = false;
 let elapsedMilliseconds = 1000;
 let isAlarmSet = true;
 
-// TODO: - add soundbar icon toggle sound
-//       - add shaking animation to alarm icon when alarmSound is playing
-//       - color transition animation to stop button when alarmSound is playing
-
 alarmButton.addEventListener(("click"), () => {
-  isAlarmSet = !isAlarmSet;
-  alarmSoundbars.classList.toggle("hide");
   if (!alarmSound.paused) {
+    alarmIcon.classList.toggle("alarm-icon-shake");
+    stopButton.classList.toggle("alarm-alert");
     alarmSound.pause();
     alarmSound.currentTime = 0;
+  } else {
+    setAlarmSound.play();
+    isAlarmSet = !isAlarmSet;
+    alarmSoundbars.classList.toggle("hide");
   }
 });
 
@@ -47,10 +48,18 @@ toggleDarkModeTheme = () => {
   darkThemeButton.classList.toggle("hide");
   body.classList.toggle("dark-mode-background");
   timeDisplay.forEach(display => display.classList.toggle("dark-mode-time-display"));
-  controlButtons.forEach(button => button.classList.toggle("dark-mode-control-buttons"));
+  controlButtons.forEach(button => {
+    if (button.classList.contains("pause")) {
+      button.childNodes[1].childNodes[3].classList.toggle("dark-mode-control-buttons");
+      button.childNodes[1].childNodes[5].classList.toggle("dark-mode-control-buttons");  
+    }
+    button.childNodes[1].childNodes[1].classList.toggle("dark-mode-control-buttons");
+    button.classList.toggle("dark-mode");
+  });
   soundButtons.forEach(button => button.classList.toggle("dark-mode-sound-selector-buttons"));
   soundButtonIcons.forEach(icon => icon.classList.toggle("dark-mode-sound-selector-icons"));
-  alarmIcon.classList.toggle("dark-mode-alarm");
+  alarmButton.classList.toggle("dark-mode-alarm-hover");
+  alarmIcon.childNodes[1].classList.toggle("dark-mode-alarm");
   alarmSoundbarsIcons.forEach(icon => icon.classList.toggle("dark-mode-soundbars"));
 };
 
@@ -128,6 +137,8 @@ pauseButton.addEventListener("click", () => {
 
 stopButton.addEventListener("click", () => {
   if (!alarmSound.paused) {
+    alarmIcon.classList.toggle("alarm-icon-shake");
+    stopButton.classList.toggle("alarm-alert");
     alarmSound.pause();
     alarmSound.currentTime = 0;
   }
@@ -141,7 +152,7 @@ stopButton.addEventListener("click", () => {
 incrementButton.addEventListener("click", () => {
   minutes.textContent = `${Number(minutes.textContent) + 5}`.padStart(2, 0);
   clickSound.play();
-});
+}); 
 
 decrementButton.addEventListener("click", () => {
   if (Number(minutes.textContent) >= 5) {
@@ -171,7 +182,8 @@ countdown = () => {
                 }
               });
               if (isAlarmSet) {
-                isAlarmSet = false;
+                alarmIcon.classList.toggle("alarm-icon-shake");
+                stopButton.classList.toggle("alarm-alert");
                 alarmSound.play();
                 alarmSound.loop = true;
               }
