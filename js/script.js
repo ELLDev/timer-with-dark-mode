@@ -83,7 +83,7 @@ soundButtons.forEach((button) => {
       button.classList.toggle("button-pressed");
       let sound = backgroundSounds[button.classList[0]];
       if (Number(button.children[1].value) === 1) {
-        button.children[1].value = 100;
+        button.children[1].value = 50;
         sound.volume = button.children[1].value / 100;
         sound.play();
       } else {
